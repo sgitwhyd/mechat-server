@@ -1,20 +1,17 @@
 import { Schema, model } from "mongoose";
 
-const userSchema = new Schema(
+const RoomSchema = new Schema(
 	{
 		name: {
 			type: String,
 			required: true,
-			minLength: 3,
-			maxLength: 30,
 		},
-		email: {
+		code: {
 			type: String,
 			required: true,
-			unique: true,
 		},
-		password: {
-			type: String,
+		user_id: {
+			type: Schema.Types.ObjectId,
 			required: true,
 		},
 	},
@@ -23,5 +20,5 @@ const userSchema = new Schema(
 	}
 );
 
-const User = model("User", userSchema);
-export default User;
+const Room = model("Room", RoomSchema);
+export default Room;

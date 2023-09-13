@@ -3,8 +3,13 @@ import cors from "cors";
 import mongoose from "mongoose";
 import { config as dotenv } from "dotenv";
 
+// middleware
+import AuthMiddleware from "./middlewares/AuthMiddleware";
+
 // routes
 import AuthRoute from "./routes/AuthRoute";
+import RoomRoute from "./routes/RoomRoute";
+import ChatRoute from "./routes/ChatRoute";
 
 class App {
 	public app: Application;
@@ -26,6 +31,8 @@ class App {
 			res.send("Build Chat Server with typescript");
 		});
 		this.app.use("/api/v1/auth", AuthRoute);
+		this.app.use("/api/v1/room", AuthMiddleware.authorize, RoomRoute);
+		this.app.use("/api/v1/chat", AuthMiddleware.authorize, ChatRoute);
 	}
 }
 
