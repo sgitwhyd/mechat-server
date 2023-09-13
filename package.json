@@ -4,6 +4,7 @@
 	"main": "index.ts",
 	"author": "Sigit Wahyudi <sigitwahyu.mutu@gmail.com>",
 	"license": "MIT",
+	"type": "commonjs",
 	"dependencies": {
 		"bcrypt": "^5.1.1",
 		"cors": "^2.8.5",
@@ -12,11 +13,12 @@
 		"express-validator": "^7.0.1",
 		"jsonwebtoken": "^9.0.2",
 		"mongoose": "^7.5.1",
-		"nodemon": "^3.0.1"
+		"nodemon": "^3.0.1",
+		"socket.io": "^4.7.2"
 	},
 	"scripts": {
 		"dev": "nodemon index.ts",
-		"start": "node index.ts"
+		"start": "ts-node-esm index.ts"
 	},
 	"devDependencies": {
 		"@types/bcrypt": "^5.0.0",
