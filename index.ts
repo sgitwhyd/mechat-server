@@ -3,6 +3,9 @@ import cors from "cors";
 import mongoose from "mongoose";
 import { config as dotenv } from "dotenv";
 
+// routes
+import AuthRoute from "./routes/AuthRoute";
+
 class App {
 	public app: Application;
 
@@ -22,6 +25,7 @@ class App {
 		this.app.route("/").get((req: Request, res: Response) => {
 			res.send("Build Chat Server with typescript");
 		});
+		this.app.use("/api/v1/auth", AuthRoute);
 	}
 }
 
