@@ -4,7 +4,7 @@ import ChatValidate from "../middlewares/ChatValidator";
 
 class ChatRoute extends BaseRouter {
 	routes(): void {
-		this.router.get("/", ChatValidate.index, ChatController.index);
+		this.router.get("/:room_id", ChatValidate.index, ChatController.index);
 		this.router.post("/", ChatValidate.create, ChatController.create);
 	}
 }
