@@ -61,6 +61,18 @@ class AuthController {
 			});
 		}
 	};
+	profile = async (req: Request, res: Response) => {
+		const credential = req.app.locals.credential;
+
+		const user = await User.findOne({
+			_id: credential.id,
+		});
+
+		return res.status(200).json({
+			status: "success",
+			data: user,
+		});
+	};
 }
 
 export default new AuthController();

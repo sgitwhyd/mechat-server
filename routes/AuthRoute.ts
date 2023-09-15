@@ -5,6 +5,7 @@ import AuthValidate from "../middlewares/AuthValidator";
 
 // controllers
 import AuthController from "../controllers/AuthController";
+import AuthMiddleware from "../middlewares/AuthMiddleware";
 
 class AuthRoute extends BaseRouter {
 	routes(): void {
@@ -14,6 +15,11 @@ class AuthRoute extends BaseRouter {
 			AuthController.register
 		);
 		this.router.post("/login", AuthValidate.login, AuthController.login);
+		this.router.get(
+			"/profile",
+			AuthMiddleware.authorize,
+			AuthController.profile
+		);
 	}
 }
 
