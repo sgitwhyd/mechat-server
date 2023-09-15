@@ -69,9 +69,9 @@ io.on("connection", (socket: any) => {
 		console.log(socket.id + "disconnected");
 	});
 
-	socket.on("get-rooms-data", () => {
-		Room.find().then((result) => {
-			io.emit("rooms", result);
+	socket.on("get-room-data", () => {
+		Room.find().then((room: any) => {
+			io.emit("room-data", room);
 		});
 	});
 
