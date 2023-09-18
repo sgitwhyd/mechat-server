@@ -6,6 +6,7 @@ class RoomRoute extends BaseRouter {
 	routes(): void {
 		this.router.get("/", RoomController.index);
 		this.router.post("/", RoomValidate.create, RoomController.create);
+		this.router.get("/:id", RoomController.detail);
 	}
 }
 

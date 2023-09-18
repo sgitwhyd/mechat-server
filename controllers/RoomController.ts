@@ -41,6 +41,24 @@ class RoomController {
 			});
 		}
 	};
+	detail = async (req: Request, res: Response) => {
+		const { id } = req.params;
+
+		try {
+			const room = await Room.findById(id).populate("user_id");
+
+			return res.status(200).json({
+				status: true,
+				message: "Room Found",
+				data: room,
+			});
+		} catch (error) {
+			return res.status(404).json({
+				status: false,
+				message: "Room not found!!",
+			});
+		}
+	};
 }
 
 export default new RoomController();
