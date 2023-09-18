@@ -22,8 +22,8 @@ const addUser = ({ socket_id, room_id, user_id }: any) => {
 	};
 };
 
-const removeUser = (socket_id: any) => {
-	users = users.filter((user) => user.socket_id !== socket_id);
+const removeUser = (user_id: any) => {
+	users = users.filter((user) => user.user_id !== user_id);
 	return users;
 };
 
