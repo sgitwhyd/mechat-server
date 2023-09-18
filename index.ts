@@ -62,10 +62,15 @@ io.on("connection", (socket: any) => {
 
 		socket.join(room_id);
 		io.emit("joined", users);
+		console.log(users);
+	});
+
+	socket.on("leave-room", (user_id: any) => {
+		removeUser(user_id);
 	});
 
 	socket.on("disconnect", () => {
-		removeUser(socket.id);
+		// socket.off();
 		console.log(socket.id + "disconnected");
 	});
 
@@ -103,7 +108,7 @@ io.on("connection", (socket: any) => {
 		})
 			.populate("user_id")
 			.then((result) => {
-				io.emit("get-chats", result);
+				io.in(room_id).emit("get-chats", result);
 			});
 	});
 
@@ -121,8 +126,9 @@ io.on("connection", (socket: any) => {
 			const user = getUser(socket.id);
 
 			if (user) {
+				console.log(user);
 				const newChat = new Chat({
-					roomId: user.room_id,
+					roomId: room_id,
 					user_id: user.user_id,
 					text,
 				});
@@ -130,14 +136,12 @@ io.on("connection", (socket: any) => {
 				newChat
 					.save()
 					.then((response) => {
-						Chat.find({
-							_id: response._id,
-						})
+						Chat.findById(response._id)
 							.populate("user_id")
 							.then((result) => {
 								console.log(result);
 
-								socket.to(room_id).emit("chat", result);
+								io.in(room_id).emit("chat", result);
 								if (callback) {
 									callback();
 								}
