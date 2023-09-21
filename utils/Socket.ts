@@ -1,4 +1,4 @@
-let users: any[] = [];
+export let users: any[] = [];
 
 const addUser = ({ socket_id, room_id, user_id }: any) => {
 	const isExist = users.find(
@@ -32,4 +32,10 @@ const getUser = (socket_id: string) => {
 	return user;
 };
 
-export { addUser, removeUser, getUser };
+const checkOnlineUserInRoom = (room_id: string) => {
+	const userInRoom = users.filter((user) => user.room_id === room_id);
+
+	return userInRoom;
+};
+
+export { addUser, removeUser, getUser, checkOnlineUserInRoom };

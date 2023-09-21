@@ -16,7 +16,13 @@ import Chat from "./models/ChatModel";
 import Room from "./models/RoomModel";
 
 // utils
-import { addUser, getUser, removeUser } from "./utils/Socket";
+import {
+	addUser,
+	getUser,
+	removeUser,
+	checkOnlineUserInRoom,
+	users,
+} from "./utils/Socket";
 class App {
 	public app: Application;
 
@@ -60,17 +66,22 @@ io.on("connection", (socket: any) => {
 			console.log(error);
 		}
 
+		// check jumlah user berdasarkan rooom id
+		const userInRoom = checkOnlineUserInRoom(room_id);
+		// emit result
 		socket.join(room_id);
-		io.emit("joined", users);
-		console.log(users);
+		io.in(room_id).emit("joined", userInRoom.length);
 	});
 
-	socket.on("leave-room", (user_id: any) => {
+	socket.on("leave-room", (user_id: any, room_id: string) => {
 		removeUser(user_id);
+		const userInRoom = checkOnlineUserInRoom(room_id);
+		io.in(room_id).emit("joined", userInRoom.length);
 	});
 
-	socket.on("disconnect", () => {
-		// socket.off();
+	socket.on("disconnect", (user_id: string) => {
+		removeUser(user_id);
+		io.emit("joined", users.length);
 		console.log(socket.id + "disconnected");
 	});
 
