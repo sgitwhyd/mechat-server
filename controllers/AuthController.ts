@@ -64,9 +64,14 @@ class AuthController {
 	profile = async (req: Request, res: Response) => {
 		const credential = req.app.locals.credential;
 
-		const user = await User.findOne({
-			_id: credential.id,
-		});
+		const user = await User.findOne(
+			{
+				_id: credential.id,
+			},
+			{
+				password: 0,
+			}
+		);
 
 		return res.status(200).json({
 			status: "success",
