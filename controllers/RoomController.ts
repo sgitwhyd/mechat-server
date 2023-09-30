@@ -1,9 +1,13 @@
 import { Request, Response } from "express";
 import Room from "../models/RoomModel";
+import pusher from "../lib/pusher";
 
 class RoomController {
 	index = async (req: Request, res: Response) => {
-		const rooms = await Room.find();
+		const rooms = await Room.find().populate({
+			path: "user_id",
+			select: "-password",
+		});
 		return res.status(200).json({
 			status: "success",
 			message: "Room showed",
@@ -28,11 +32,11 @@ class RoomController {
 			});
 
 			const room = await newRoom.save();
-
+			await pusher.trigger("rooms", "new_room", room);
 			return res.status(200).json({
 				status: "success",
 				message: "Room Created",
-				data: room,
+				result: room,
 			});
 		} else {
 			return res.status(200).json({

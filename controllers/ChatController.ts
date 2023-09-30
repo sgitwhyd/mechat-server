@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import Chat from "../models/ChatModel";
+import pusher from "../lib/pusher";
 
 class ChatController {
 	index = async (req: Request, res: Response) => {
@@ -14,7 +15,7 @@ class ChatController {
 				return res.status(200).json({
 					status: "success",
 					message: "Chat showed",
-					data: chats,
+					results: chats,
 				});
 			} else {
 				return res.status(404).json({
@@ -39,12 +40,20 @@ class ChatController {
 			user_id: credential.id,
 		});
 
-		const response = await newChat.save();
-
-		return res.status(200).json({
-			status: "success",
-			message: "Chat Created",
-			data: response,
+		await newChat.save().then(async (result) => {
+			await Chat.findOne({ _id: result._id })
+				.populate({
+					path: "user_id",
+					select: "-password",
+				})
+				.then(async (chat) => {
+					await pusher.trigger(room_id, "new_message", chat);
+					return res.status(200).json({
+						status: "success",
+						message: "Chat Created",
+						data: result,
+					});
+				});
 		});
 	};
 }
